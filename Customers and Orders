@@ -66,3 +66,11 @@ where feb.quantity > 2;
 -- Answer: there are 312 clients who placed a total of 890 orders that contain more than two items with the avg 
 -- spend on the muli item orders being 4.17
 
+-- Task: List all the products sold in Los Angelas in Feb and include how many of each were sold
+
+select 
+product, 
+sum(quantity) as quantity_sold
+from BIT_DB.FebSales
+where location like "%Los Angeles%"
+group by product;
