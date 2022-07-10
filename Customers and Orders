@@ -1,0 +1,68 @@
+-- DB containing tabels for Customer data and sales from Jan - May individualy 
+-- customers table has 2 columns; order_id , acctnum
+-- sales tables have 6 columns; orderID, Product, Quantity, price, orderdate, location
+
+-- Question: how many orders were placed in Jan?
+
+select count(orderID) as total_number_orders_jan
+from BIT_DB.JanSales
+where BIT_DB.JanSales.Quantity > 0;
+-- Answer: 9,723 orders were placed in January
+
+-- Question: How many of those orders were for an Iphone?
+
+select count(orderID) as total_number_iphoneOrders_jan
+from BIT_DB.JanSales
+where BIT_DB.JanSales.Quantity > 0
+and BIT_DB.JanSales.Product = "iPhone";
+-- Answer: 379 orders were placed for iPhones in Jan
+
+-- Task: Select the customer account numbers for all the orders that were placed in Feb
+
+select acctnum
+from BIT_DB.customers c
+inner join BIT_DB.FebSales fs
+on c.order_id = fs.orderID;
+
+-- Question: What was the cheapest product sold in Jan and what was its price?
+
+select distinct product, price
+from BIT_DB.JanSales
+where quantity >= 1 
+order by price asc 
+limit 1;
+-- Answer: product is AAA Batteries (4-pack) price is 2.99
+
+-- Question: What is the total revenue for each product sold in Jan
+select product, 
+sum(quantity)*price as revenue
+from BIT_DB.JanSales
+group by product
+order by revenue desc; 
+
+-- Question: Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, 
+-- how many of each were sold, and what was the total revenue?
+
+select product, 
+sum(quantity) as total_sold,
+sum(quantity)*price as feb_revenue
+from BIT_DB.FebSales
+where location = "548 Lincoln St, Seattle, WA 98101"
+group by product
+order by feb_revenue desc;
+-- Answer: 2 units of AA Batteries (4-Pack) were sold for a total revenue of 7.68
+
+-- Question: How many customers ordered more than 2 products at a time in Feb 
+-- and what was the average amount spent for those customers 
+
+select 
+count(distinct cust.acctnum) as customers_with_multiItemOrders,
+count(cust.acctnum) as total_number_multiItemOrders,
+avg(feb.quantity * price) as avg_order_spend
+from BIT_DB.FebSales feb
+left join BIT_DB.customers cust
+on cust.order_id = feb.orderID
+where feb.quantity > 2;
+-- Answer: there are 312 clients who placed a total of 890 orders that contain more than two items with the avg 
+-- spend on the muli item orders being 4.17
+
