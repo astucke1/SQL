@@ -1,0 +1,56 @@
+-- Table created and queries using the public spotify data available from kaggal  
+
+CREATE TABLE BIT_DB.KaggalSpotifyData (
+id integer PRIMARY KEY, 
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL, 
+popularity integer NOT NULL,
+danceability decimal (4,3) NOT NULL,
+energy decimal (4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal (5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal (5, 4) NOT NULL, 
+acoutsticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal (5,4) NOT NULL,
+valence decimal (4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL
+);
+
+
+-- checking to make sure data was imported
+select * from KaggalSpotifyData limit 10;
+
+
+-- finding the 10 most danceable artist 
+select artist_name, danceability
+from KaggalSpotifyData
+where danceability > .7
+group by artist_name
+order by danceability desc
+limit 10;
+
+--artist_name	danceability
+--J Balvin	0.903
+--Los Legendarios	0.849
+--Riton	0.824
+--Ed Sheeran	0.807
+--Internet Money	0.8
+--Tiësto	0.798
+--Polo G	0.789
+--Rauw Alejandro	0.78
+--Masked Wolf	0.778
+--Doja Cat	0.764
+
+-- finding avg length of a danceable song (.8 chosen arbitrarily) 
+select
+avg(duration_ms) as avgLengthMS,
+avg(duration_ms / 1000) as avgLengthSeconds,
+avg(duration_ms / 60000) as avgLengthMinutes
+from KaggalSpotifyData
+where danceability > .8;
+-- avgLengthMS = 204066.57142857142 avgLengthSeconds = 203.57142857142858 avgLengthMinutes = 2.71428571428571
