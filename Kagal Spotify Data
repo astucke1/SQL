@@ -54,3 +54,12 @@ avg(duration_ms / 60000) as avgLengthMinutes
 from KaggalSpotifyData
 where danceability > .8;
 -- avgLengthMS = 204066.57142857142 avgLengthSeconds = 203.57142857142858 avgLengthMinutes = 2.71428571428571
+
+-- example using CTE 
+with tempTable as (
+select artist_name, track_name, danceability
+from KaggalSpotifyData
+where danceability > .69
+)
+
+select artist_name, track_name from tempTable;
