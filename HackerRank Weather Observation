@@ -46,3 +46,16 @@ where CITY regexp "^[^aeiou]";
 select distinct CITY
 from STATION    
 where CITY regexp "[^aieou]$";
+
+--Q: Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates.
+
+(select distinct CITY from STATION where CITY regexp "^[^aeiou]")
+UNION
+(select distinct CITY from STATION where CITY regexp "[^aeiou]$")
+
+-- Q: Query the list of CITY names from STATION that do not start with vowels and do not end with vowels. Your result cannot contain duplicates.
+
+select distinct city 
+from station 
+where city regexp "^[^aeiou]"
+and city regexp "[^aeiou]$";
